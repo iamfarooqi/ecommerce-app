@@ -9,9 +9,17 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="sign-up">
-        <Stack.Screen name="sign-up" component={SignUpScreen} />
-        <Stack.Screen name="sign-in" component={SignInScreen} />
+      <Stack.Navigator initialRouteName="sign-up" screenOptions={{
+        headerStyle: {
+          backgroundColor: '#9400D3',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
+        <Stack.Screen name="sign-up" component={SignUpScreen} options={{ title: 'Sign Up' }} />
+        <Stack.Screen name="sign-in" component={SignInScreen} options={{ title: 'Sign In' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
