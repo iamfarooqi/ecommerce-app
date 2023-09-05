@@ -10,7 +10,7 @@ const User = () => {
         source={require('../../images/default_user.png')}
         style={styles.user}
       />
-      <Text>User</Text>
+      <Text style={styles.name}>User</Text>
     </View>
   );
 };

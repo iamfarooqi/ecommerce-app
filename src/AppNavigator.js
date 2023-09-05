@@ -5,13 +5,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUpScreen from './screens/SignUp';
 import SignInScreen from './screens/SignIn';
 import HomeScreen from './screens/HomeScreen';
+import Main from './screens/Main';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="home-screen"
+            <Stack.Navigator
             // screenOptions={{
             //     headerStyle: {
             //         backgroundColor: '#9400D3',
@@ -22,7 +23,12 @@ const AppNavigator = () => {
             //     },
             // }}
             >
-                <Stack.Screen name="home-screen" component={HomeScreen} options={{ title: 'Home' }} />
+                {/* <Stack.Screen name="home-screen" component={HomeScreen} options={{ title: 'Home' }} /> */}
+                <Stack.Screen
+                    name="Main"
+                    component={Main}
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen name="sign-up" component={SignUpScreen} options={{ title: 'Sign Up' }} />
                 <Stack.Screen name="sign-in" component={SignInScreen} options={{ title: 'Sign In' }} />
             </Stack.Navigator>

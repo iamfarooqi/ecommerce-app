@@ -10,7 +10,7 @@ const Main = () => {
       <Drawer.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{headerShown: true}}
+        options={{headerShown: false}}
       />
     </Drawer.Navigator>
   );

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "910631213556",
+    "firebase_url": "https://ecommerce-app-2e410-default-rtdb.firebaseio.com",
+    "project_id": "ecommerce-app-2e410",
+    "storage_bucket": "ecommerce-app-2e410.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:910631213556:android:e8768c9df5ec305c34c1a1",
+        "android_client_info": {
+          "package_name": "com.EcommerceApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "910631213556-nll024cmakbn1v5cpalshr30ao49tk7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBndXxpeei_J411ARlkJoEAT5fRlZmfT7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "910631213556-c0jjfkep7bpe7n0u4eadsl2h76c804vj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "910631213556-0rjbn855ta1e9440rj2d84rid7je45an.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.iamfarooqi.ecommerceapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
