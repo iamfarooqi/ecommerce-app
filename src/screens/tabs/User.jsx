@@ -1,26 +1,56 @@
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
 import Header from '../../common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
 const User = () => {
   const navigation = useNavigation();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data from AsyncStorage when the component mounts
+    const fetchUserData = async () => {
+      try {
+        const userJSON = await AsyncStorage.getItem('USER_DATA');
+        console.log(userJSON, 'userJSON>>');
+        if (userJSON) {
+          const user = JSON.parse(userJSON);
+          setUserData(user);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const logout = async () => {
-    await AsyncStorage.removeItem('IS_USER_LOGGED_IN');
-    navigation.navigate('Login');
+    try {
+      await AsyncStorage.removeItem('IS_USER_LOGGED_IN');
+      await AsyncStorage.removeItem('USER_DATA');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
+
   return (
     <View style={styles.container}>
       <Header title={'Profile'} />
-      <Image
-        source={require('../../images/default_user.png')}
-        style={styles.user}
-      />
-      <Text style={styles.name}>{'Farooqi'}</Text>
-      <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
-        {'farooi@gmail.com'}
-      </Text>
+      {userData && (
+        <>
+          <Image
+            source={require('../../images/default_user.png')}
+            style={styles.user}
+          />
+          <Text style={styles.name}>{userData.name}</Text>
+          <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
+            {userData.email}
+          </Text>
+        </>
+      )}
       <TouchableOpacity style={[styles.tab, {marginTop: 40}]}>
         <Text style={styles.txt}>Edit Profile</Text>
       </TouchableOpacity>
@@ -49,6 +79,7 @@ const User = () => {
 };
 
 export default User;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

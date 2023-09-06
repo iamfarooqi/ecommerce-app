@@ -1,41 +1,43 @@
-import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import React, {useState} from 'react';
-import CustomButton from '../common/CustomButton';
+import {View, Text, StyleSheet, TextInput, Alert} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomButton from '../common/CustomButton';
 
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-  const loginUser = () => {
-    firestore()
-      .collection('Users')
-      // Filter results
-      .where('email', '==', email)
-      .get()
-      .then(querySnapshot => {
-        /* ... */
-        console.log(querySnapshot.doc[0]);
-        if (querySnapshot.docs[0]._data.password == pass) {
-          gotonext();
+  const [password, setPassword] = useState('');
+
+  const loginUser = async () => {
+    try {
+      const querySnapshot = await firestore()
+        .collection('Users')
+        .where('email', '==', email)
+        .get();
+
+      if (querySnapshot.docs.length > 0) {
+        const user = querySnapshot.docs[0].data();
+        if (user.password === password) {
+          // Store user data in AsyncStorage
+          await AsyncStorage.setItem('IS_USER_LOGGED_IN', 'yes');
+          await AsyncStorage.setItem('USER_DATA', JSON.stringify(user)); // Store user data as JSON string
+          navigation.navigate('Main');
         } else {
           Alert.alert('Wrong Password');
         }
-      })
-      .catch(error => {
-        // Alert.alert('No user Found');
-        console.log(error);
-      });
+      } else {
+        Alert.alert('No user found');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
   };
-  const gotonext = async () => {
-    await AsyncStorage.setItem('IS_USER_LOGGED_IN', 'yes');
-    navigation.navigate('Main');
-  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{'Login'}</Text>
+      <Text style={styles.title}>Login</Text>
 
       <TextInput
         placeholder="Enter Email"
@@ -45,52 +47,52 @@ const Login = () => {
       />
 
       <TextInput
-        placeholder="Enter password"
+        placeholder="Enter Password"
         style={styles.input}
-        value={pass}
-        onChangeText={txt => setPass(txt)}
+        secureTextEntry={true}
+        value={password}
+        onChangeText={txt => setPassword(txt)}
       />
 
       <CustomButton
-        bg={'#E27800'}
-        title={'Login'}
-        color={'#fff'}
-        onClick={() => {
-          loginUser();
-        }}
+        bg="#E27800"
+        title="Login"
+        color="#fff"
+        onClick={loginUser}
       />
+
       <Text
         style={styles.loginText}
         onPress={() => {
           navigation.navigate('Signup');
         }}>
-        {'Sign up'}
+        Sign up
       </Text>
     </View>
   );
 };
 
 export default Login;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    justifyContent: 'center',
   },
   title: {
     color: '#000',
     fontSize: 40,
-    marginLeft: 20,
-    marginTop: 50,
-    marginBottom: 50,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
-    width: '90%',
     height: 50,
     borderRadius: 10,
     borderWidth: 0.5,
     paddingLeft: 20,
-    alignSelf: 'center',
-    marginTop: 10,
+    marginBottom: 10,
   },
   loginText: {
     alignSelf: 'center',
