@@ -35,6 +35,28 @@ const ProductDetail = () => {
     console.log(isUserLoggedIn);
     return isUserLoggedIn;
   };
+  const handleAddToCart = async () => {
+    const isUserLoggedIn = await checkUserStatus();
+    if (isUserLoggedIn) {
+      console.log('User is logged in');
+      // Add item to cart through Redux
+      dispatch(
+        addItemToCart({
+          category: route.params.data.category,
+          description: route.params.data.description,
+          id: route.params.data.id,
+          image: route.params.data.image,
+          price: route.params.data.price,
+          qty: qty,
+          rating: route.params.data.rating,
+          title: route.params.data.title,
+        }),
+      );
+    } else {
+      console.log('User is not logged in');
+      setModalVisible(true);
+    }
+  };
   return (
     <View style={styles.container}>
       <Header
@@ -77,8 +99,10 @@ const ProductDetail = () => {
           style={styles.wishlistBtn}
           onPress={() => {
             if (checkUserStatus()) {
+              console.log('1');
               dispatch(addItemToWishList(route.params.data));
             } else {
+              console.log('2');
               setModalVisible(true);
             }
           }}>
@@ -92,24 +116,7 @@ const ProductDetail = () => {
           bg={'#FF9A0C'}
           title={'Add To Cart'}
           color={'#fff'}
-          onClick={() => {
-            if (checkUserStatus()) {
-              dispatch(
-                addItemToCart({
-                  category: route.params.data.category,
-                  description: route.params.data.description,
-                  id: route.params.data.id,
-                  image: route.params.data.image,
-                  price: route.params.data.price,
-                  qty: qty,
-                  rating: route.params.data.rating,
-                  title: route.params.data.title,
-                }),
-              );
-            } else {
-              setModalVisible(true);
-            }
-          }}
+          onClick={handleAddToCart}
         />
       </ScrollView>
       <AskForLoginModal

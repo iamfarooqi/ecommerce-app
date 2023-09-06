@@ -17,9 +17,9 @@ const User = () => {
         source={require('../../images/default_user.png')}
         style={styles.user}
       />
-      <Text style={styles.name}>{'Gaurav'}</Text>
+      <Text style={styles.name}>{'Farooqi'}</Text>
       <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
-        {'gaurav@gmail.com'}
+        {'farooi@gmail.com'}
       </Text>
       <TouchableOpacity style={[styles.tab, {marginTop: 40}]}>
         <Text style={styles.txt}>Edit Profile</Text>
