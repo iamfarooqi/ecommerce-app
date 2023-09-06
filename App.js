@@ -1,13 +1,14 @@
+import { View, Text } from 'react-native';
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
 import AppNavigator from './src/AppNavigator';
-
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 const App = () => {
   return (
-    <AppNavigator />
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
   );
-}
-
-const styles = StyleSheet.create({})
+};
 
 export default App;

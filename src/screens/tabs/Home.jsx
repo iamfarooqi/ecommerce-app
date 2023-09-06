@@ -10,10 +10,13 @@ import {
 import React, {useEffect, useState} from 'react';
 import Header from '../../common/Header';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {addProducts} from '../../redux/slices/ProductsSlice';
 
 const Home = () => {
   const navigation = useNavigation();
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
   }, []);
@@ -25,6 +28,7 @@ const Home = () => {
         json.map(item => {
           item.qty = 1;
         });
+        dispatch(addProducts(json));
       });
   };
   return (
@@ -91,11 +95,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginLeft: 20,
-    color: 'black',
   },
   desc: {
     marginLeft: 20,
-    color: 'gray',
   },
   price: {
     color: 'green',
