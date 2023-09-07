@@ -25,8 +25,11 @@ import {
 import CustomButton from '../common/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {orderItem} from '../redux/slices/OrderSlice';
+import {CardField, useStripe} from '@stripe/stripe-react-native';
+import {STRIPE_SECRET_KEY} from '../../stripeConfig';
 
 const Checkout = () => {
+  const {confirmPayment} = useStripe();
   const navigation = useNavigation();
   const items = useSelector(state => state.cart);
   const [cartItems, setCartItems] = useState([]);
@@ -35,6 +38,7 @@ const Checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState(
     'Please Select Address',
   );
+  console.log(selectedAddress, 'selectedAddress');
   const dispatch = useDispatch();
   useEffect(() => {
     setCartItems(items.data);
@@ -89,32 +93,35 @@ const Checkout = () => {
     dispatch(emptyCart([]));
     navigation.navigate('OrderSuccess');
   };
-  // const payNow = () => {
-  //   var options = {
-  //     description: 'Credits towards consultation',
-  //     image: 'https://i.imgur.com/3g7nmJC.png',
-  //     currency: 'INR',
-  //     key: 'rzp_test_Wy1YsPwzDklWv8', // Your api key
-  //     amount: getTotal() * 100,
-  //     name: 'foo',
-  //     prefill: {
-  //       email: 'void@razorpay.com',
-  //       contact: '9191919191',
-  //       name: 'Razorpay Software',
-  //     },
-  //     theme: {color: '#3E8BFF'},
-  //   };
-  //   RazorpayCheckout.open(options)
-  //     .then(data => {
-  //       // handle success
-  //       //   alert(`Success: ${data.razorpay_payment_id}`);
-  //       orderPlace(data.razorpay_payment_id);
-  //     })
-  //     .catch(error => {
-  //       // handle failure
-  //       alert(`Error: ${error.code} | ${error.description}`);
-  //     });
-  // };
+
+  const {stripe} = useStripe();
+
+  const handlePayment = async () => {
+    try {
+      const {paymentMethod, error} = await stripe.confirmPaymentClientSecret({
+        paymentMethod: {
+          card: {
+            number: '4242424242424242', // Test card number
+            expMonth: 12, // Any future month
+            expYear: 25, // Any future year
+            cvc: '123', // Any 3-digit CVC code
+          }, // Replace with your card element or details
+        },
+        paymentIntentClientSecret: STRIPE_SECRET_KEY, // Replace with your Payment Intent's client_secret
+      });
+
+      if (error) {
+        console.error(error);
+        // Handle payment error
+      } else {
+        // Payment is successful, you can use paymentMethod object
+        // Call the orderPlace function or perform other actions
+        orderPlace(paymentMethod.id); // Assuming orderPlace is a function to handle the order
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <Header
@@ -274,14 +281,21 @@ const Checkout = () => {
             styles.title,
             {marginTop: 10, fontSize: 16, color: '#636363'},
           ]}>
-          {selectedAddress}
+          {selectedAddress || 'Please Select Address'}
         </Text>
+        {/* <CardField
+          postalCodeEnabled={true}
+          placeholder={{
+            number: 'Card Number',
+            postalCode: 'ZIP Code',
+          }}
+        /> */}
         <CustomButton
           bg={'green'}
           title={'Pay & Order'}
           color={'#fff'}
           onClick={() => {
-            payNow();
+            handlePayment(); // Call handlePayment when the "Pay & Order" button is clicked
           }}
         />
       </ScrollView>

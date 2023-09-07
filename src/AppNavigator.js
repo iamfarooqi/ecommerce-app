@@ -8,6 +8,8 @@ import Cart from './screens/Cart';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import Checkout from './screens/Checkout';
+import Addresses from './screens/Addresses';
+import AddAddress from './screens/AddAddress';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -44,16 +46,16 @@ const AppNavigator = () => {
                     component={Checkout}
                     options={{ headerShown: false }}
                 />
-                {/* <Stack.Screen
-          name="Addresses"
-          component={Addresses}
-          options={{headerShown: false}}
-        /> */}
-                {/* <Stack.Screen
-          name="AddAddress"
-          component={AddAddress}
-          options={{headerShown: false}}
-        /> */}
+                <Stack.Screen
+                    name="Addresses"
+                    component={Addresses}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="AddAddress"
+                    component={AddAddress}
+                    options={{ headerShown: false }}
+                />
                 {/* <Stack.Screen
           name="OrderSuccess"
           component={OrderSuccess}
