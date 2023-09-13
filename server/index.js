@@ -11,6 +11,9 @@ const PORT = 8080;
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.json({ message: "Server is Running" });
+})
 app.post("/pay", async (req, res) => {
   try {
     const { logInUserData, selectedAddress, price } = req.body;
