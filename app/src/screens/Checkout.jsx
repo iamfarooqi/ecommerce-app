@@ -7,6 +7,7 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../common/Header';
@@ -29,20 +30,18 @@ import {CardField, useStripe} from '@stripe/stripe-react-native';
 import {STRIPE_SECRET_KEY} from '../../stripeConfig';
 
 const Checkout = () => {
-  const {confirmPayment} = useStripe();
+  const stripe = useStripe();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const items = useSelector(state => state.cart);
+  const isFocused = useIsFocused();
+
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(0);
-  const isFocused = useIsFocused();
+  const [logInUserData, setLogInUserData] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(
     'Please Select Address',
   );
-  console.log(selectedAddress, 'selectedAddress');
-  const dispatch = useDispatch();
-  useEffect(() => {
-    setCartItems(items.data);
-  }, [items]);
 
   const getTotal = () => {
     let total = 0;
@@ -51,9 +50,19 @@ const Checkout = () => {
     });
     return total.toFixed(0);
   };
-  useEffect(() => {
-    getSelectedAddress();
-  }, [isFocused]);
+
+  const userData = async () => {
+    try {
+      const userJSON = await AsyncStorage.getItem('USER_DATA');
+      if (userJSON) {
+        const user = JSON.parse(userJSON);
+        setLogInUserData(user);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
   const getSelectedAddress = async () => {
     setSelectedAddress(await AsyncStorage.getItem('MY_ADDRESS'));
   };
@@ -94,34 +103,53 @@ const Checkout = () => {
     navigation.navigate('OrderSuccess');
   };
 
-  const {stripe} = useStripe();
-
-  const handlePayment = async () => {
+  const pay = async () => {
     try {
-      const {paymentMethod, error} = await stripe.confirmPaymentClientSecret({
-        paymentMethod: {
-          card: {
-            number: '4242424242424242', // Test card number
-            expMonth: 12, // Any future month
-            expYear: 25, // Any future year
-            cvc: '123', // Any 3-digit CVC code
-          }, // Replace with your card element or details
-        },
-        paymentIntentClientSecret: STRIPE_SECRET_KEY, // Replace with your Payment Intent's client_secret
-      });
+      // sending request
+      const name = logInUserData.name;
+      const price = getTotal();
 
-      if (error) {
-        console.error(error);
-        // Handle payment error
-      } else {
-        // Payment is successful, you can use paymentMethod object
-        // Call the orderPlace function or perform other actions
-        orderPlace(paymentMethod.id); // Assuming orderPlace is a function to handle the order
+      if (name && price) {
+        const response = await fetch('http://10.0.2.16:8080/pay', {
+          method: 'POST',
+          body: JSON.stringify({logInUserData, selectedAddress, price}),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        if (!response.ok) return Alert.alert(data.message);
+        const clientSecret = data.clientSecret;
+        console.log(name, 'name>>');
+        const initSheet = await stripe.initPaymentSheet({
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: name,
+        });
+        console.log(initSheet, 'initSheet>');
+        if (initSheet.error) return Alert.alert(initSheet.error.message);
+        const presentSheet = await stripe.presentPaymentSheet({
+          clientSecret,
+        });
+        if (presentSheet.error) return Alert.alert(presentSheet.error.message);
+        Alert.alert('Payment complete, thank you!');
+        dispatch(orderItem(data));
+        dispatch(emptyCart([]));
+        navigation.navigate('Main');
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Something went wrong, try again later!');
     }
   };
+
+  // useEffect(() => {
+  // }, [isFocused]);
+
+  useEffect(() => {
+    getSelectedAddress();
+    setCartItems(items.data);
+    userData();
+  }, [items, isFocused]);
   return (
     <View style={styles.container}>
       <Header
@@ -295,7 +323,7 @@ const Checkout = () => {
           title={'Pay & Order'}
           color={'#fff'}
           onClick={() => {
-            handlePayment(); // Call handlePayment when the "Pay & Order" button is clicked
+            pay(); // Call handlePayment when the "Pay & Order" button is clicked
           }}
         />
       </ScrollView>
