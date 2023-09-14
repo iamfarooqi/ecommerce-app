@@ -13,9 +13,10 @@ import Header from '../../common/Header';
 import {useNavigation} from '@react-navigation/native';
 
 const Wishlist = () => {
+  const navigation = useNavigation();
   const items = useSelector(state => state.wishlist);
   const [wishlistItems, setWishlistItems] = useState(items.data);
-  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <Header title={'Wishlist Items'} />
@@ -47,6 +48,11 @@ const Wishlist = () => {
           );
         }}
       />
+      {wishlistItems.length < 1 && (
+        <View style={styles.noItems}>
+          <Text>No Items in Wish List</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -83,5 +89,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 20,
     marginTop: 5,
+  },
+  noItems: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

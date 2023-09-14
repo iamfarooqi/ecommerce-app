@@ -28,7 +28,7 @@ const Header = ({
         onPress={() => {
           onClickLeftIcon();
         }}>
-        <Image source={leftIcon} style={styles.icon} />
+        {leftIcon && <Image source={leftIcon} style={styles.icon} />}
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
       {!isCart && <View></View>}

@@ -28,9 +28,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {orderItem} from '../redux/slices/OrderSlice';
 import {CardField, useStripe} from '@stripe/stripe-react-native';
 import {STRIPE_SECRET_KEY} from '../../stripeConfig';
+import PaymentButton from '../common/PaymentButton';
 
 const Checkout = () => {
-  const stripe = useStripe();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const items = useSelector(state => state.cart);
@@ -102,48 +102,6 @@ const Checkout = () => {
     dispatch(emptyCart([]));
     navigation.navigate('OrderSuccess');
   };
-
-  const pay = async () => {
-    try {
-      // sending request
-      const name = logInUserData.name;
-      const price = getTotal();
-
-      if (name && price) {
-        const response = await fetch('http://10.0.2.16:8080/pay', {
-          method: 'POST',
-          body: JSON.stringify({logInUserData, selectedAddress, price}),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        if (!response.ok) return Alert.alert(data.message);
-        const clientSecret = data.clientSecret;
-        console.log(name, 'name>>');
-        const initSheet = await stripe.initPaymentSheet({
-          paymentIntentClientSecret: clientSecret,
-          merchantDisplayName: name,
-        });
-        console.log(initSheet, 'initSheet>');
-        if (initSheet.error) return Alert.alert(initSheet.error.message);
-        const presentSheet = await stripe.presentPaymentSheet({
-          clientSecret,
-        });
-        if (presentSheet.error) return Alert.alert(presentSheet.error.message);
-        Alert.alert('Payment complete, thank you!');
-        dispatch(orderItem(data));
-        dispatch(emptyCart([]));
-        navigation.navigate('Main');
-      }
-    } catch (err) {
-      console.error(err);
-      Alert.alert('Something went wrong, try again later!');
-    }
-  };
-
-  // useEffect(() => {
-  // }, [isFocused]);
 
   useEffect(() => {
     getSelectedAddress();
@@ -319,37 +277,13 @@ const Checkout = () => {
             ]}>
             {selectedAddress || 'Please Select Address'}
           </Text>
-          <CustomButton
-            bg={'green'}
-            title={'Pay & Order'}
-            color={'#fff'}
-            onClick={() => {
-              pay();
-            }}
-          />
         </ScrollView>
       </View>
-      <View style={styles.footer}>
-        <CustomButton
-          bg={'green'}
-          title={'Pay & Order'}
-          color={'#fff'}
-          onClick={() => {
-            pay();
-          }}
-        />
-      </View>
+      <PaymentButton
+        selectedAddress={selectedAddress}
+        logInUserData={logInUserData}
+      />
     </View>
-    // <View style={styles.container}>
-    //   <Header
-    //     leftIcon={require('../images/back.png')}
-    //     title={'Checkout'}
-    //     onClickLeftIcon={() => {
-    //       navigation.goBack();
-    //     }}
-    //   />
-
-    // </View>
   );
 };
 

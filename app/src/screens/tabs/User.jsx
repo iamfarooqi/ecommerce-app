@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Header from '../../common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import CustomButton from '../../common/CustomButton';
 
 const User = () => {
   const navigation = useNavigation();
@@ -39,7 +40,7 @@ const User = () => {
   return (
     <View style={styles.container}>
       <Header title={'Profile'} />
-      {userData && (
+      {userData ? (
         <>
           <Image
             source={require('../../images/default_user.png')}
@@ -49,31 +50,42 @@ const User = () => {
           <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
             {userData.email}
           </Text>
+          <TouchableOpacity style={[styles.tab, {marginTop: 40}]}>
+            <Text style={styles.txt}>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, {marginTop: 10}]}
+            onPress={() => {
+              navigation.navigate('Orders');
+            }}>
+            <Text style={styles.txt}>Orders</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
+            <Text style={styles.txt}>Address</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
+            <Text style={styles.txt}>Payment Methods</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, {marginTop: 10}]}
+            onPress={() => {
+              logout();
+            }}>
+            <Text style={styles.txt}>Log out</Text>
+          </TouchableOpacity>
         </>
+      ) : (
+        <View style={styles.noItems}>
+          <Text>Not Logged In</Text>
+          <Text
+            style={styles.loginText}
+            onPress={() => {
+              navigation.navigate('Signup');
+            }}>
+            Sign up
+          </Text>
+        </View>
       )}
-      <TouchableOpacity style={[styles.tab, {marginTop: 40}]}>
-        <Text style={styles.txt}>Edit Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.tab, {marginTop: 10}]}
-        onPress={() => {
-          navigation.navigate('Orders');
-        }}>
-        <Text style={styles.txt}>Orders</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
-        <Text style={styles.txt}>Address</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
-        <Text style={styles.txt}>Payment Methods</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.tab, {marginTop: 10}]}
-        onPress={() => {
-          logout();
-        }}>
-        <Text style={styles.txt}>Log out</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -109,5 +121,17 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: '#000',
+  },
+  noItems: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginText: {
+    alignSelf: 'center',
+    marginTop: 20,
+    fontSize: 18,
+    textDecorationLine: 'underline',
   },
 });

@@ -19,10 +19,11 @@ import {
 import CheckoutLayout from '../common/CheckoutLayout';
 
 const Cart = () => {
+  const navigation = useNavigation();
   const items = useSelector(state => state.cart);
+
   const [cartItems, setCartItems] = useState([]);
 
-  const navigation = useNavigation();
   const dispatch = useDispatch();
   useEffect(() => {
     setCartItems(items.data);
