@@ -7,27 +7,17 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
-  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../common/Header';
-import {
-  CommonActions,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   addItemToCart,
-  emptyCart,
   reduceItemFromCart,
   removeItemFromCart,
 } from '../redux/slices/CartSlice';
-import CustomButton from '../common/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {orderItem} from '../redux/slices/OrderSlice';
-import {CardField, useStripe} from '@stripe/stripe-react-native';
-import {STRIPE_SECRET_KEY} from '../../stripeConfig';
 import PaymentButton from '../common/PaymentButton';
 
 const Checkout = () => {
@@ -68,39 +58,41 @@ const Checkout = () => {
   };
 
   const orderPlace = paymentId => {
-    const day = new Date().getDate();
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
-    const hours = new Date().getHours();
-    const minutes = new Date().getMinutes();
-    let ampm = '';
-    if (hours > 12) {
-      ampm = 'pm';
-    } else {
-      ampm = 'am';
+    try {
+      const day = new Date().getDate();
+      const month = new Date().getMonth() + 1;
+      const year = new Date().getFullYear();
+      const hours = new Date().getHours();
+      const minutes = new Date().getMinutes();
+      let ampm = '';
+      if (hours > 12) {
+        ampm = 'pm';
+      } else {
+        ampm = 'am';
+      }
+      const data = {
+        items: cartItems,
+        amount: '$' + getTotal(),
+        address: selectedAddress,
+        paymentId: paymentId,
+        paymentStatus: selectedMethod == 3 ? 'Pending' : 'Success',
+        createdAt:
+          day +
+          '/' +
+          month +
+          '/' +
+          year +
+          ' ' +
+          hours +
+          ':' +
+          minutes +
+          ' ' +
+          ampm,
+      };
+      return data;
+    } catch (error) {
+      console.log('Error:', error);
     }
-    const data = {
-      items: cartItems,
-      amount: '$' + getTotal(),
-      address: selectedAddress,
-      paymentId: paymentId,
-      paymentStatus: selectedMethod == 3 ? 'Pending' : 'Success',
-      createdAt:
-        day +
-        '/' +
-        month +
-        '/' +
-        year +
-        ' ' +
-        hours +
-        ':' +
-        minutes +
-        ' ' +
-        ampm,
-    };
-    dispatch(orderItem(data));
-    dispatch(emptyCart([]));
-    navigation.navigate('OrderSuccess');
   };
 
   useEffect(() => {
@@ -201,9 +193,10 @@ const Checkout = () => {
                 {tintColor: selectedMethod == 0 ? 'orange' : 'black'},
               ]}
             />
-            <Text style={styles.paymentMethdodsTxt}>Credit Card</Text>
+            <Text style={styles.paymentMethdodsTxt}>Card</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+
+          {/* <TouchableOpacity
             style={styles.paymentMethods}
             onPress={() => {
               setSelectedMethod(1);
@@ -219,44 +212,8 @@ const Checkout = () => {
                 {tintColor: selectedMethod == 1 ? 'orange' : 'black'},
               ]}
             />
-            <Text style={styles.paymentMethdodsTxt}>Debit Card</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.paymentMethods}
-            onPress={() => {
-              setSelectedMethod(2);
-            }}>
-            <Image
-              source={
-                selectedMethod == 2
-                  ? require('../images/radio_2.png')
-                  : require('../images/radio_1.png')
-              }
-              style={[
-                styles.img,
-                {tintColor: selectedMethod == 2 ? 'orange' : 'black'},
-              ]}
-            />
-            <Text style={styles.paymentMethdodsTxt}>UPI</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.paymentMethods}
-            onPress={() => {
-              setSelectedMethod(3);
-            }}>
-            <Image
-              source={
-                selectedMethod == 3
-                  ? require('../images/radio_2.png')
-                  : require('../images/radio_1.png')
-              }
-              style={[
-                styles.img,
-                {tintColor: selectedMethod == 3 ? 'orange' : 'black'},
-              ]}
-            />
             <Text style={styles.paymentMethdodsTxt}>Cash on Delivery</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <View style={styles.addressView}>
             <Text style={styles.title}>Address</Text>
             <Text
@@ -282,6 +239,8 @@ const Checkout = () => {
       <PaymentButton
         selectedAddress={selectedAddress}
         logInUserData={logInUserData}
+        getTotal={getTotal}
+        orderPlace={orderPlace}
       />
     </View>
   );
@@ -298,6 +257,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 30,
     color: '#000',
+  },
+  scrollContainer: {
+    flex: 1, // Take up all available space
+    paddingBottom: 90,
   },
   productItem: {
     width: Dimensions.get('window').width,

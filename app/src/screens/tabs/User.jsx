@@ -3,14 +3,12 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Header from '../../common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import CustomButton from '../../common/CustomButton';
 
 const User = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Fetch user data from AsyncStorage when the component mounts
     const fetchUserData = async () => {
       try {
         const userJSON = await AsyncStorage.getItem('USER_DATA');
@@ -50,9 +48,6 @@ const User = () => {
           <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
             {userData.email}
           </Text>
-          <TouchableOpacity style={[styles.tab, {marginTop: 40}]}>
-            <Text style={styles.txt}>Edit Profile</Text>
-          </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, {marginTop: 10}]}
             onPress={() => {
@@ -60,7 +55,11 @@ const User = () => {
             }}>
             <Text style={styles.txt}>Orders</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
+          <TouchableOpacity
+            style={[styles.tab, {marginTop: 10}]}
+            onPress={() => {
+              navigation.navigate('Addresses');
+            }}>
             <Text style={styles.txt}>Address</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>

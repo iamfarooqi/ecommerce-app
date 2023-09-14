@@ -13,17 +13,20 @@ import {useDispatch} from 'react-redux';
 import {orderItem} from '../redux/slices/OrderSlice';
 import {emptyCart} from '../redux/slices/CartSlice';
 
-const PaymentButton = ({selectedAddress, logInUserData}) => {
+const PaymentButton = ({
+  selectedAddress,
+  logInUserData,
+  getTotal,
+  orderPlace,
+}) => {
   const navigation = useNavigation();
   const stripe = useStripe();
   const dispatch = useDispatch();
 
   const pay = async () => {
-    console.log('clicked');
     try {
-      // sending request
       const name = logInUserData.name;
-      const price = 90;
+      const price = getTotal();
 
       if (name && price) {
         const response = await fetch(
@@ -39,21 +42,20 @@ const PaymentButton = ({selectedAddress, logInUserData}) => {
         const data = await response.json();
         if (!response.ok) return Alert.alert(data.message);
         const clientSecret = data.clientSecret;
-        console.log(name, 'name>>');
         const initSheet = await stripe.initPaymentSheet({
           paymentIntentClientSecret: clientSecret,
           merchantDisplayName: name,
         });
-        console.log(initSheet, 'initSheet>');
         if (initSheet.error) return Alert.alert(initSheet.error.message);
         const presentSheet = await stripe.presentPaymentSheet({
           clientSecret,
         });
         if (presentSheet.error) return Alert.alert(presentSheet.error.message);
-        Alert.alert('Payment complete, thank you!');
-        dispatch(orderItem(data));
+
+        const orderData = orderPlace(clientSecret);
+        dispatch(orderItem(orderData));
         dispatch(emptyCart([]));
-        navigation.navigate('Main');
+        navigation.navigate('OrderSuccess');
       }
     } catch (err) {
       console.error(err);
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   checkout: {
     width: '80%',

@@ -18,9 +18,7 @@ const Addresses = () => {
   const addressList = useSelector(state => state.address);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(addressList);
-  }, [isFocused]);
+
   const defaultAddress = async item => {
     await AsyncStorage.setItem(
       'MY_ADDRESS',
@@ -35,6 +33,10 @@ const Addresses = () => {
     );
     navigation.goBack();
   };
+
+  useEffect(() => {
+    console.log(addressList);
+  }, [isFocused]);
   return (
     <View style={styles.container}>
       <Header
