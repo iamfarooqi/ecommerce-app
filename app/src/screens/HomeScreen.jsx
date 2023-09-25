@@ -39,11 +39,6 @@ const HomeScreen = () => {
   }, []);
   return (
     <View style={styles.container}>
-      {/* <Header
-        leftIcon={require('../images/menu.png')}
-        rightIcon={require('../images/cart.png')}
-        title={'Grocery App'}
-      /> */}
       {selectedTab == 0 ? (
         <Home />
       ) : selectedTab == 1 ? (
@@ -52,9 +47,9 @@ const HomeScreen = () => {
         <Wishlist />
       ) : selectedTab == 3 ? (
         <Notification />
-      ) : (
+      ) : selectedTab == 4 ? (
         <User />
-      )}
+      ) : null}
       {!isKeyboardVisible && (
         <View style={styles.bottomView}>
           <TouchableOpacity

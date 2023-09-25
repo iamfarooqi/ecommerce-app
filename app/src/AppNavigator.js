@@ -5,13 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import Main from './screens/Main';
 import ProductDetail from './screens/ProductDetail';
 import Cart from './screens/Cart';
-import Login from './screens/Login';
-import Signup from './screens/Signup';
 import Checkout from './screens/Checkout';
 import Addresses from './screens/Addresses';
 import AddAddress from './screens/AddAddress';
 import OrderSuccess from './screens/OrderSuccess';
 import Orders from './screens/Orders';
+import Signup from './screens/registration/Signup';
+import Login from './screens/registration/Login';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {

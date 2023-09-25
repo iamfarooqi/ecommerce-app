@@ -8,20 +8,19 @@ const User = () => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const userJSON = await AsyncStorage.getItem('USER_DATA');
-        console.log(userJSON, 'userJSON>>');
-        if (userJSON) {
-          const user = JSON.parse(userJSON);
-          setUserData(user);
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+  const fetchUserData = async () => {
+    try {
+      const userJSON = await AsyncStorage.getItem('USER_DATA');
+      if (userJSON) {
+        const user = JSON.parse(userJSON);
+        setUserData(user);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchUserData();
   }, []);
 
