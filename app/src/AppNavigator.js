@@ -12,6 +12,7 @@ import OrderSuccess from './screens/OrderSuccess';
 import Orders from './screens/Orders';
 import Signup from './screens/registration/Signup';
 import Login from './screens/registration/Login';
+import Search from './screens/tabs/Search';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -26,6 +27,11 @@ const AppNavigator = () => {
                 <Stack.Screen
                     name="ProductDetail"
                     component={ProductDetail}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Search"
+                    component={Search}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen

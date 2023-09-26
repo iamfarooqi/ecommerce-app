@@ -41,8 +41,6 @@ const HomeScreen = () => {
     <View style={styles.container}>
       {selectedTab == 0 ? (
         <Home />
-      ) : selectedTab == 1 ? (
-        <Search />
       ) : selectedTab == 2 ? (
         <Wishlist />
       ) : selectedTab == 3 ? (
@@ -66,16 +64,7 @@ const HomeScreen = () => {
               style={styles.bottomTabIcon}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.bottomTab}
-            onPress={() => {
-              setSelectedTab(1);
-            }}>
-            <Image
-              source={require('../images/search.png')}
-              style={styles.bottomTabIcon}
-            />
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.bottomTab}
             onPress={() => {
