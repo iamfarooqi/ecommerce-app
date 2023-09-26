@@ -12,6 +12,7 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import Header from '../../common/Header';
 import {useNavigation} from '@react-navigation/native';
+import tailwind from 'twrnc';
 
 const Search = () => {
   const products = useSelector(state => state);
@@ -68,34 +69,59 @@ const Search = () => {
           </TouchableOpacity>
         )}
       </View>
-      <View style={{marginTop: 50}}>
+      <View style={tailwind`flex flex-row justify-between mt-2`}>
         <FlatList
+          key={2}
           data={searchedList}
-          renderItem={({item, index}) => {
-            return (
-              <TouchableOpacity
-                activeOpacity={1}
-                style={styles.productItem}
-                onPress={() => {
-                  navigation.navigate('ProductDetail', {data: item});
-                }}>
-                <Image source={{uri: item.image}} style={styles.itemImage} />
-                <View>
-                  <Text style={styles.name}>
-                    {item.title.length > 25
-                      ? item.title.substring(0, 25) + '...'
+          renderItem={({item}) => (
+            <TouchableOpacity
+              activeOpacity={1}
+              style={tailwind`mr-1 ml-2 my-2`}
+              onPress={() => {
+                navigation.navigate('ProductDetail', {data: item});
+              }}>
+              <View
+                style={tailwind`w-48 transform overflow-hidden rounded-lg bg-white`}>
+                <Image
+                  style={tailwind`h-34 w-full object-cover object-center`}
+                  source={{uri: item.image}}
+                  alt="Product Image"
+                />
+                <View style={tailwind`px-2`}>
+                  <Text style={tailwind`text-lg font-medium text-gray-900`}>
+                    {item.title.length > 15
+                      ? item.title.substring(0, 15) + '...'
                       : item.title}
                   </Text>
-                  <Text style={styles.desc}>
-                    {item.description.length > 30
-                      ? item.description.substring(0, 30) + '...'
+                  <Text style={tailwind`text-base text-gray-700`}>
+                    {item.description.length > 15
+                      ? item.description.substring(0, 15) + '...'
                       : item.description}
                   </Text>
-                  <Text style={styles.price}>{'$' + item.price}</Text>
+                  <View style={tailwind`flex flex-row justify-between`}>
+                    <View style={tailwind``}>
+                      <Text
+                        style={tailwind`text-lg font-semibold text-gray-900`}>
+                        {'$' + item.price}
+                      </Text>
+                    </View>
+                    <View style={tailwind`flex`}>
+                      <Text
+                        style={tailwind`text-base font-medium text-gray-500`}>
+                        {'$' + item.price}
+                      </Text>
+                      <Text
+                        style={tailwind`text-base font-medium text-green-500`}>
+                        {'$' + item.price}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              </TouchableOpacity>
-            );
-          }}
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id}
+          numColumns={2}
         />
       </View>
     </View>

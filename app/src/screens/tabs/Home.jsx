@@ -33,69 +33,6 @@ const Home = () => {
       });
   };
 
-  const data = [
-    {
-      id: '1',
-      name: 'Product 1',
-      description: 'Product description',
-      price: '$20.00',
-      discountPrice: '$25.00',
-      discount: '20% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: '2',
-      name: 'Product 2',
-      description: 'Product description',
-      price: '$30.00',
-      discountPrice: '$35.00',
-      discount: '15% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: '3',
-      name: 'Product 3',
-      description: 'Product description',
-      price: '$30.00',
-      discountPrice: '$35.00',
-      discount: '15% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: '4',
-      name: 'Product 4',
-      description: 'Product description',
-      price: '$30.00',
-      discountPrice: '$35.00',
-      discount: '15% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: '5',
-      name: 'Product 5',
-      description: 'Product description',
-      price: '$30.00',
-      discountPrice: '$35.00',
-      discount: '15% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    {
-      id: '6',
-      name: 'Product 6',
-      description: 'Product description',
-      price: '$30.00',
-      discountPrice: '$35.00',
-      discount: '15% off',
-      imageUrl:
-        'https://images.unsplash.com/photo-1659019479940-e3fd3fba24d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    },
-    // Add more data objects for additional cards
-  ];
   return (
     <View style={styles.container}>
       <Header
@@ -172,32 +109,5 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  productItem: {
-    width: Dimensions.get('window').width,
-    height: 100,
-    marginTop: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  itemImage: {
-    width: 100,
-    height: 100,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 20,
-  },
-  desc: {
-    marginLeft: 20,
-  },
-  price: {
-    color: 'green',
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 20,
-    marginTop: 5,
   },
 });

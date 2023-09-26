@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import Header from '../../common/Header';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import tailwind from 'twrnc';
 
 const User = () => {
   const navigation = useNavigation();
@@ -35,48 +36,84 @@ const User = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={tailwind`flex-1 bg-white`}>
       <Header title={'Profile'} />
       {userData ? (
         <>
-          <Image
-            source={require('../../images/default_user.png')}
-            style={styles.user}
-          />
-          <Text style={styles.name}>{userData.name}</Text>
-          <Text style={[styles.name, {fontSize: 16, marginTop: 0}]}>
-            {userData.email}
-          </Text>
+          <View style={tailwind`flex flex-row bg-[#008080] items-center p-4`}>
+            <View style={tailwind`w-18 h-18 bg-cover rounded-md mr-3`}>
+              <Image
+                source={{
+                  uri: 'https://tuk-cdn.s3.amazonaws.com/assets/components/avatars/a_5.png',
+                }}
+                style={tailwind`focus:outline-none rounded-full h-full w-full ring ring-gray-300 overflow-hidden shadow`}
+              />
+            </View>
+            <View>
+              <TouchableOpacity style={tailwind`focus:outline-none`}>
+                <Text style={tailwind`text-lg font-bold text-white`}>
+                  {userData.name}
+                </Text>
+              </TouchableOpacity>
+              <Text style={tailwind`text-md text-white`}>{userData.email}</Text>
+            </View>
+          </View>
+
           <TouchableOpacity
-            style={[styles.tab, {marginTop: 10}]}
+            style={tailwind`w-full self-center border-b-[#DBDBDB] justify-center mt-2 px-2`}
             onPress={() => {
               navigation.navigate('Orders');
             }}>
-            <Text style={styles.txt}>Orders</Text>
+            <View style={tailwind`flex flex-row items-center border-b py-2`}>
+              <Image
+                source={require('../../images/order.png')}
+                style={tailwind`w-6 h-6 mr-2`}
+              />
+              <Text style={tailwind`text-black`}>My Orders</Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tab, {marginTop: 10}]}
+            style={tailwind`w-full self-center border-b-[#DBDBDB] justify-center mt-2 px-2`}
             onPress={() => {
               navigation.navigate('Addresses');
             }}>
-            <Text style={styles.txt}>Address</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.tab, {marginTop: 10}]}>
-            <Text style={styles.txt}>Payment Methods</Text>
+            <View style={tailwind`flex flex-row items-center border-b py-2`}>
+              <Image
+                source={require('../../images/address.png')}
+                style={tailwind`w-6 h-6 mr-2`}
+              />
+              <Text style={tailwind`text-black`}>Your Addresses</Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.tab, {marginTop: 10}]}
+            style={tailwind`w-full self-center border-b-[#DBDBDB] justify-center mt-2 px-2`}>
+            <View style={tailwind`flex flex-row items-center border-b py-2`}>
+              <Image
+                source={require('../../images/payment.png')}
+                style={tailwind`w-6 h-6 mr-2`}
+              />
+              <Text style={tailwind`text-black`}>Payment Methods</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={tailwind`w-full self-center border-b-[#DBDBDB] justify-center mt-2 px-2`}
             onPress={() => {
               logout();
             }}>
-            <Text style={styles.txt}>Log out</Text>
+            <View style={tailwind`flex flex-row items-center border-b py-2`}>
+              <Image
+                source={require('../../images/logout.png')}
+                style={tailwind`w-6 h-6 mr-2`}
+              />
+              <Text style={tailwind`text-black`}>Log out</Text>
+            </View>
           </TouchableOpacity>
         </>
       ) : (
-        <View style={styles.noItems}>
+        <View style={tailwind`flex-1 justify-center items-center`}>
           <Text>Not Logged In</Text>
           <Text
-            style={styles.loginText}
+            style={tailwind`mt-20 text-lg underline`}
             onPress={() => {
               navigation.navigate('Signup');
             }}>
@@ -90,46 +127,4 @@ const User = () => {
 
 export default User;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  user: {
-    width: 100,
-    height: 100,
-    alignSelf: 'center',
-    marginTop: 50,
-  },
-  name: {
-    alignSelf: 'center',
-    marginTop: 10,
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#000',
-  },
-  tab: {
-    width: '90%',
-    height: 50,
-    borderBottomWidth: 0.3,
-    alignSelf: 'center',
-    borderBottomColor: '#DBDBDB',
-    paddingLeft: 20,
-    justifyContent: 'center',
-  },
-  txt: {
-    color: '#000',
-  },
-  noItems: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginText: {
-    alignSelf: 'center',
-    marginTop: 20,
-    fontSize: 18,
-    textDecorationLine: 'underline',
-  },
-});
+

@@ -25,15 +25,16 @@ const Header = ({
   const navigation = useNavigation();
   return (
     <View style={styles.header}>
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={() => {
-          onClickLeftIcon();
-        }}>
-        {leftIcon && <Image source={leftIcon} style={styles.icon} />}
-      </TouchableOpacity>
+      {leftIcon && (
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
+            onClickLeftIcon();
+          }}>
+          <Image source={leftIcon} style={styles.icon} />
+        </TouchableOpacity>
+      )}
       <Text style={styles.title}>{title}</Text>
-      {!isCart && <View></View>}
       <View style={tailwind`flex flex-row items-center justify-between`}>
         {searchIcon && (
           <TouchableOpacity
