@@ -14,6 +14,7 @@ import Search from './tabs/Search';
 import Wishlist from './tabs/Wishlist';
 import Notification from './tabs/Notification';
 import User from './tabs/User';
+import tailwind from 'twrnc';
 
 const HomeScreen = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -79,6 +80,28 @@ const HomeScreen = () => {
               style={styles.bottomTabIcon}
             />
           </TouchableOpacity>
+          <View
+            style={{
+              top: -20,
+              ...tailwind`bg-[#008080] p-4 rounded-full flex flex-row justify-center items-center`,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setSelectedTab(3);
+              }}>
+              <Image
+                source={
+                  selectedTab == 3
+                    ? require('../images/camera_fill.png')
+                    : require('../images/camera.png')
+                }
+                style={{
+                  tintColor: '#fff',
+                  ...styles.bottomTabIcon,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity
             style={styles.bottomTab}
             onPress={() => {
@@ -122,7 +145,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: 70,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',

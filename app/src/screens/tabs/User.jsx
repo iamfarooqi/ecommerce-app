@@ -46,7 +46,7 @@ const User = () => {
                 source={{
                   uri: 'https://tuk-cdn.s3.amazonaws.com/assets/components/avatars/a_5.png',
                 }}
-                style={tailwind`focus:outline-none rounded-full h-full w-full ring ring-gray-300 overflow-hidden shadow`}
+                style={tailwind`rounded-full h-full w-full ring ring-gray-300 overflow-hidden shadow`}
               />
             </View>
             <View>

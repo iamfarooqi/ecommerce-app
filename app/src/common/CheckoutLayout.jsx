@@ -4,25 +4,34 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import tailwind from 'twrnc';
 
 const CheckoutLayout = ({total, items}) => {
   const navigation = useNavigation();
   return (
-    <View style={styles.container}>
-      <View style={styles.tab}>
-        <Text>{`(items ${items} )`}</Text>
-        <Text style={styles.total}>{'Total: $' + total}</Text>
+    <View
+      style={tailwind`absolute bottom-0 h-20 px-2 w-full bg-white flex flex-row justify-between`}>
+      <View style={tailwind`justify-center items-center`}>
+        <Text style={tailwind`text-lg`}>Total</Text>
+        <Text style={tailwind`font-bold text-xl`}>{'$' + total}</Text>
       </View>
-      <View style={styles.tab}>
+      <View style={tailwind`justify-center items-center`}>
         <TouchableOpacity
-          style={styles.checkout}
+          style={tailwind`px-3 py-2 rounded-full bg-[#008080] flex flex-row justify-center items-center`}
           onPress={() => {
             navigation.navigate('Checkout');
           }}>
-          <Text style={{color: '#fff'}}>Checkout</Text>
+          <Text style={tailwind`text-white text-lg`}>Checkout</Text>
+          <View style={tailwind`rounded-full p-1.5 ml-3 bg-white`}>
+            <Image
+              source={require('../images/next.png')}
+              style={tailwind`w-4 h-4`}
+            />
+          </View>
         </TouchableOpacity>
       </View>
     </View>

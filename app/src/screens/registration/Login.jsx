@@ -83,7 +83,7 @@ const Login = () => {
 
         <Pressable
           onPress={() => loginUser()}
-          style={tailwind`h-12 bg-purple-500 rounded-md flex flex-row justify-center items-center px-6`}>
+          style={tailwind`h-12 bg-[#008080] rounded-md flex flex-row justify-center items-center px-6`}>
           <View style={tailwind`flex-1 flex items-center`}>
             <Text style={tailwind`text-white text-base font-medium`}>
               Sign In

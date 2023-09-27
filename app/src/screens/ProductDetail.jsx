@@ -16,6 +16,7 @@ import {addItemToWishList} from '../redux/slices/WishlistSlice';
 import {addItemToCart} from '../redux/slices/CartSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AskForLoginModal from '../common/AskForLoginModal';
+import tailwind from 'twrnc';
 const ProductDetail = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -68,56 +69,82 @@ const ProductDetail = () => {
         }}
         isCart={true}
       />
-      <ScrollView>
-        <Image source={{uri: route.params.data.image}} style={styles.banner} />
-        <Text style={styles.title}>{route.params.data.title}</Text>
-        <Text style={styles.desc}>{route.params.data.description}</Text>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Text style={[styles.price, {color: '#000'}]}>{'Price:'}</Text>
-          <Text style={styles.price}>{' $' + route.params.data.price}</Text>
-          <View style={styles.qtyView}>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => {
-                if (qty > 1) {
-                  setQty(qty - 1);
-                }
-              }}>
-              <Text style={{fontSize: 18, fontWeight: '600'}}>-</Text>
-            </TouchableOpacity>
-            <Text style={styles.qty}>{qty}</Text>
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => {
-                setQty(qty + 1);
-              }}>
-              <Text style={{fontSize: 18, fontWeight: '600'}}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <TouchableOpacity
-          style={styles.wishlistBtn}
-          onPress={() => {
-            if (checkUserStatus()) {
-              console.log('1');
-              dispatch(addItemToWishList(route.params.data));
-            } else {
-              console.log('2');
-              setModalVisible(true);
-            }
-          }}>
-          <Image
-            source={require('../images/wishlist.png')}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
 
-        <CustomButton
-          bg={'#FF9A0C'}
-          title={'Add To Cart'}
-          color={'#fff'}
-          onClick={handleAddToCart}
-        />
+      <ScrollView>
+        <View style={tailwind`p-2 mx-auto`}>
+          <View style={tailwind`w-82 h-82 mx-auto`}>
+            <Image
+              style={tailwind`p-5 h-full w-full`}
+              source={{uri: route.params.data.image}}
+            />
+          </View>
+
+          <Text style={tailwind`text-3xl my-3`}>
+            {route.params.data.title.length > 20
+              ? route.params.data.title.substring(0, 20) + '...'
+              : route.params.data.title}
+          </Text>
+          <Text>
+            {route.params.data.description.length > 100
+              ? route.params.data.description.substring(0, 100) + '...'
+              : route.params.data.description}
+          </Text>
+          <View
+            style={tailwind`flex flex-row items-center justify-between my-3`}>
+            <Text style={tailwind`font-semibold text-xl`}>
+              {'$' + route.params.data.price}
+            </Text>
+            <View>
+              <Text style={tailwind`font-semibold text-xl text-green-500`}>
+                50% OFF
+              </Text>
+            </View>
+          </View>
+          <View
+            style={tailwind`flex flex-row items-center justify-between my-3`}>
+            <Text style={tailwind`font-semibold text-lg`}>Select Quantity</Text>
+            <View style={tailwind`flex flex-row items-center`}>
+              <TouchableOpacity
+                style={tailwind`border w-6 h-6 flex items-center justify-center rounded-full`}
+                onPress={() => {
+                  if (qty > 1) {
+                    setQty(qty - 1);
+                  }
+                }}>
+                <Text>-</Text>
+              </TouchableOpacity>
+              <Text style={tailwind`mx-2`}>{qty}</Text>
+              <TouchableOpacity
+                style={tailwind`border w-6 h-6 flex items-center justify-center rounded-full`}
+                onPress={() => {
+                  setQty(qty + 1);
+                }}>
+                <Text>+</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.wishlistBtn}
+            onPress={() => {
+              if (checkUserStatus()) {
+                dispatch(addItemToWishList(route.params.data));
+              } else {
+                setModalVisible(true);
+              }
+            }}>
+            <Image
+              source={require('../images/wishlist.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+
+          <CustomButton
+            bg={'#FC2E20'}
+            title={'Add To Cart'}
+            color={'#fff'}
+            onClick={handleAddToCart}
+          />
+        </View>
       </ScrollView>
       <AskForLoginModal
         modalVisible={modalVisible}
@@ -172,7 +199,7 @@ const styles = StyleSheet.create({
   wishlistBtn: {
     position: 'absolute',
     right: 20,
-    top: 100,
+    top: 20,
     backgroundColor: '#E2DFDF',
     justifyContent: 'center',
     alignItems: 'center',
@@ -184,14 +211,9 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  qtyView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    marginLeft: 20,
-  },
+  qtyView: {},
   btn: {
-    padding: 5,
+    padding: 3,
     width: 30,
     justifyContent: 'center',
     alignItems: 'center',
