@@ -11,6 +11,7 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import Header from '../../common/Header';
 import {useNavigation} from '@react-navigation/native';
+import tailwind from 'twrnc';
 
 const Wishlist = () => {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ const Wishlist = () => {
   return (
     <View style={styles.container}>
       <Header title={'Wishlist Items'} />
-      <FlatList
+      {/* <FlatList
         data={wishlistItems}
         renderItem={({item, index}) => {
           return (
@@ -43,6 +44,60 @@ const Wishlist = () => {
                     : item.description}
                 </Text>
                 <Text style={styles.price}>{'$' + item.price}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      /> */}
+      <FlatList
+        data={wishlistItems}
+        renderItem={({item, index}) => {
+          return (
+            <TouchableOpacity
+              activeOpacity={1}
+              style={tailwind``}
+              onPress={() => {
+                navigation.navigate('ProductDetail', {data: item});
+              }}>
+              <View
+                style={tailwind`w-full flex flex-row items-center mb-1 transform overflow-hidden rounded-lg bg-white mx-auto p-2`}>
+                <View style={tailwind`w-20 h-20`}>
+                  <Image
+                    source={{uri: item.image}}
+                    style={tailwind`w-full h-full`}
+                  />
+                </View>
+
+                <View style={tailwind`px-2 w-[80%]`}>
+                  <View
+                    style={tailwind`w-full flex flex-row items-center justify-between`}>
+                    <View style={tailwind``}>
+                      <Text style={tailwind`text-lg font-bold`}>
+                        {item.title.length > 25
+                          ? item.title.substring(0, 25) + '...'
+                          : item.title}
+                      </Text>
+                      <Text style={tailwind``}>
+                        {item.description.length > 30
+                          ? item.description.substring(0, 30) + '...'
+                          : item.description}
+                      </Text>
+                    </View>
+                    <View style={tailwind``}>
+                      <Image
+                        source={require('../../images/delete.png')}
+                        style={tailwind`w-4 h-4`}
+                      />
+                    </View>
+                  </View>
+
+                  <View
+                    style={tailwind`w-full flex flex-row items-center justify-between mt-2`}>
+                    <Text style={tailwind`font-semibold text-lg`}>
+                      {'$' + item.price}
+                    </Text>
+                  </View>
+                </View>
               </View>
             </TouchableOpacity>
           );
@@ -75,11 +130,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
   },
-  name: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 20,
-  },
+
   desc: {
     marginLeft: 20,
   },

@@ -39,28 +39,4 @@ const CheckoutLayout = ({total, items}) => {
 };
 
 export default CheckoutLayout;
-const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    bottom: 0,
-    height: 70,
-    width: Dimensions.get('window').width,
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-  },
-  tab: {
-    width: '50%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkout: {
-    width: '80%',
-    height: '60%',
-    backgroundColor: '#FF8605',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  total: {fontWeight: '700', fontSize: 18},
-});
+

@@ -21,10 +21,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PaymentButton from '../common/PaymentButton';
 
 const Checkout = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const items = useSelector(state => state.cart);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const items = useSelector(state => state.cart);
 
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(0);

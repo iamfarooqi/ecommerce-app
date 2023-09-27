@@ -56,7 +56,9 @@ const Cart = () => {
             onPress={() => {
               navigation.navigate('Main');
             }}>
-            <Text>+ Add more Items</Text>
+            <Text style={tailwind`text-[#008080] font-bold`}>
+              + Add more Items
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

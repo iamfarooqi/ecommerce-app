@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useStripe} from '@stripe/stripe-react-native';
 import {useDispatch} from 'react-redux';
@@ -22,9 +22,11 @@ const PaymentButton = ({
   const navigation = useNavigation();
   const stripe = useStripe();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const pay = async () => {
     try {
+      setLoading(true);
       const name = logInUserData.name;
       const price = getTotal();
 
@@ -55,6 +57,8 @@ const PaymentButton = ({
         const orderData = orderPlace(clientSecret);
         dispatch(orderItem(orderData));
         dispatch(emptyCart([]));
+        setLoading(false);
+
         navigation.navigate('OrderSuccess');
       }
     } catch (err) {
@@ -70,7 +74,9 @@ const PaymentButton = ({
         onPress={() => {
           pay();
         }}>
-        <Text style={{color: '#fff'}}>Pay & Order</Text>
+        <Text style={{color: '#fff'}}>
+          {loading ? 'loading' : 'Pay & Order'}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -55,7 +55,7 @@ const User = () => {
                   {userData.name}
                 </Text>
               </TouchableOpacity>
-              <Text style={tailwind`text-md text-white`}>{userData.email}</Text>
+              <Text style={tailwind`text-white`}>{userData.email}</Text>
             </View>
           </View>
 
@@ -126,5 +126,3 @@ const User = () => {
 };
 
 export default User;
-
-

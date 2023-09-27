@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import Header from '../common/Header';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -17,10 +9,12 @@ import {addItemToCart} from '../redux/slices/CartSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AskForLoginModal from '../common/AskForLoginModal';
 import tailwind from 'twrnc';
+
 const ProductDetail = () => {
   const navigation = useNavigation();
-  const route = useRoute();
   const dispatch = useDispatch();
+  const route = useRoute();
+
   const [qty, setQty] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -36,6 +30,7 @@ const ProductDetail = () => {
     console.log(isUserLoggedIn);
     return isUserLoggedIn;
   };
+
   const handleAddToCart = async () => {
     const isUserLoggedIn = await checkUserStatus();
     if (isUserLoggedIn) {
@@ -58,8 +53,9 @@ const ProductDetail = () => {
       setModalVisible(true);
     }
   };
+
   return (
-    <View style={styles.container}>
+    <View style={tailwind`flex-1 bg-white`}>
       <Header
         leftIcon={require('../images/back.png')}
         rightIcon={require('../images/cart.png')}
@@ -95,7 +91,7 @@ const ProductDetail = () => {
               {'$' + route.params.data.price}
             </Text>
             <View>
-              <Text style={tailwind`font-semibold text-xl text-green-500`}>
+              <Text style={tailwind`font-semibold text-lg text-green-500`}>
                 50% OFF
               </Text>
             </View>
@@ -124,7 +120,7 @@ const ProductDetail = () => {
             </View>
           </View>
           <TouchableOpacity
-            style={styles.wishlistBtn}
+            style={tailwind`absolute right-8 top-8 bg-gray-300 p-2 rounded-full`}
             onPress={() => {
               if (checkUserStatus()) {
                 dispatch(addItemToWishList(route.params.data));
@@ -134,7 +130,7 @@ const ProductDetail = () => {
             }}>
             <Image
               source={require('../images/wishlist.png')}
-              style={styles.icon}
+              style={tailwind`w-6 h-6`}
             />
           </TouchableOpacity>
 
@@ -165,64 +161,3 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  banner: {
-    width: '100%',
-    height: 300,
-    resizeMode: 'center',
-  },
-  title: {
-    fontSize: 23,
-    color: '#000',
-    fontWeight: '600',
-    marginLeft: 20,
-    marginTop: 20,
-  },
-  desc: {
-    fontSize: 16,
-
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 10,
-  },
-  price: {
-    color: 'green',
-    marginLeft: 20,
-    marginTop: 20,
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  wishlistBtn: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-    backgroundColor: '#E2DFDF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  icon: {
-    width: 24,
-    height: 24,
-  },
-  qtyView: {},
-  btn: {
-    padding: 3,
-    width: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.5,
-    borderRadius: 10,
-    marginLeft: 10,
-  },
-  qty: {
-    marginLeft: 10,
-    fontSize: 18,
-  },
-});

@@ -15,13 +15,14 @@ import {useNavigation} from '@react-navigation/native';
 import tailwind from 'twrnc';
 
 const Search = () => {
-  const products = useSelector(state => state);
-  const [search, setSearch] = useState('');
   const navigation = useNavigation();
-  const [oldData, setOldData] = useState(products.product.data);
-  const [searchedList, setSearchedList] = useState(oldData);
+  const products = useSelector(state => state);
+
+  const [search, setSearch] = useState('');
+  const [searchedList, setSearchedList] = useState(products.product.data);
+
   const filterData = txt => {
-    let newData = oldData.filter(item => {
+    let newData = products.product.data.filter(item => {
       return item.title.toLowerCase().match(txt.toLowerCase());
     });
     setSearchedList(newData);
