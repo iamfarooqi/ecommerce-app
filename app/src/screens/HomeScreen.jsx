@@ -15,8 +15,12 @@ import Wishlist from './tabs/Wishlist';
 import Notification from './tabs/Notification';
 import User from './tabs/User';
 import tailwind from 'twrnc';
+import Camera from './tabs/Camera';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   useEffect(() => {
@@ -42,9 +46,9 @@ const HomeScreen = () => {
     <View style={styles.container}>
       {selectedTab == 0 ? (
         <Home />
-      ) : selectedTab == 2 ? (
+      ) : selectedTab == 1 ? (
         <Wishlist />
-      ) : selectedTab == 3 ? (
+      ) : selectedTab == 2 ? (
         <Notification />
       ) : selectedTab == 4 ? (
         <User />
@@ -69,11 +73,11 @@ const HomeScreen = () => {
           <TouchableOpacity
             style={styles.bottomTab}
             onPress={() => {
-              setSelectedTab(2);
+              setSelectedTab(1);
             }}>
             <Image
               source={
-                selectedTab == 2
+                selectedTab == 1
                   ? require('../images/wishlist_fill.png')
                   : require('../images/wishlist.png')
               }
@@ -87,7 +91,7 @@ const HomeScreen = () => {
             }}>
             <TouchableOpacity
               onPress={() => {
-                setSelectedTab(3);
+                navigation.navigate('Camera');
               }}>
               <Image
                 source={
@@ -105,11 +109,11 @@ const HomeScreen = () => {
           <TouchableOpacity
             style={styles.bottomTab}
             onPress={() => {
-              setSelectedTab(3);
+              setSelectedTab(2);
             }}>
             <Image
               source={
-                selectedTab == 3
+                selectedTab == 2
                   ? require('../images/noti_fill.png')
                   : require('../images/noti.png')
               }

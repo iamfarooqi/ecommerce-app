@@ -13,6 +13,7 @@ import Orders from './screens/Orders';
 import Signup from './screens/registration/Signup';
 import Login from './screens/registration/Login';
 import Search from './screens/tabs/Search';
+import Camera from './screens/tabs/Camera';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -72,6 +73,11 @@ const AppNavigator = () => {
                 <Stack.Screen
                     name="Orders"
                     component={Orders}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Camera"
+                    component={Camera}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>
