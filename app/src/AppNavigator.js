@@ -14,6 +14,7 @@ import Signup from './screens/registration/Signup';
 import Login from './screens/registration/Login';
 import Search from './screens/tabs/Search';
 import Camera from './screens/tabs/Camera';
+import PredictionScreen from './screens/PredictionScreen';
 
 const Stack = createNativeStackNavigator();
 const AppNavigator = () => {
@@ -78,6 +79,11 @@ const AppNavigator = () => {
                 <Stack.Screen
                     name="Camera"
                     component={Camera}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="PredictionScreen"
+                    component={PredictionScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

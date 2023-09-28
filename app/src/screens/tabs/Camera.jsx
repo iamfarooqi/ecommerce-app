@@ -1,10 +1,12 @@
 import React, {useState, useRef} from 'react';
 import {RNCamera} from 'react-native-camera';
 import {TouchableOpacity, Alert, StyleSheet, View, Image} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 
 const Camera = () => {
-  const [takingPic, setTakingPic] = useState(false);
+  const navigation = useNavigation();
   const cameraRef = useRef(null);
+  const [takingPic, setTakingPic] = useState(false);
 
   const takePicture = async () => {
     if (cameraRef.current && !takingPic) {
@@ -14,19 +16,21 @@ const Camera = () => {
         forceUpOrientation: true,
       };
 
-      setTakingPic(true);
+      //   setTakingPic(true);
 
       try {
-        const data = await cameraRef.current.takePictureAsync(options);
-        Alert.alert('Success', JSON.stringify(data));
+        const {uri} = await cameraRef.current.takePictureAsync(options);
+        // Alert.alert('Success', 'Picture taken');
+        navigation.navigate('PredictionScreen', {data: {uri}});
       } catch (err) {
         Alert.alert(
           'Error',
           'Failed to take a picture: ' + (err.message || err),
         );
-      } finally {
-        setTakingPic(false);
       }
+      //   finally {
+      //     setTakingPic(false);
+      //   }
     }
   };
 
