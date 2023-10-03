@@ -84,22 +84,6 @@ const Signup = () => {
           value={confirmPassword}
           onChangeText={txt => setConfirmPassword(txt)}
         />
-        {/* <View
-            style={tailwind`flex flex-row justify-between items-center my-4`}>
-            <View style={tailwind`flex-row items-center`}>
-              <Pressable
-                style={tailwind`bg-white border border-slate-200 h-6 w-6 rounded-sm mr-2 flex items-center justify-center`}>
-                <View style={tailwind`bg-green-400 w-4 h-4 rounded-sm`} />
-              </Pressable>
-              <Text style={tailwind`text-slate-900`}>Remember me</Text>
-            </View>
-            <Pressable>
-              <Text style={tailwind`text-blue-400 font-bold`}>
-                Reset password
-              </Text>
-            </Pressable>
-          </View> */}
-
         <Pressable
           onPress={() => addUser()}
           style={tailwind`h-12 bg-[#008080] rounded-md flex flex-row justify-center items-center px-6`}>

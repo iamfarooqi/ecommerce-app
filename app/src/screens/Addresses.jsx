@@ -12,6 +12,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {deleteAddress} from '../redux/slices/AddressSlice';
+import tailwind from 'twrnc';
 
 const Addresses = () => {
   const navigation = useNavigation();
@@ -51,64 +52,69 @@ const Addresses = () => {
         renderItem={({item, index}) => {
           return (
             <TouchableOpacity
-              style={{
-                width: '90%',
-
-                backgroundColor: '#fff',
-                borderWidth: 0.5,
-                alignSelf: 'center',
-                marginTop: 20,
-                paddingLeft: 20,
-                paddingBottom: 10,
-                paddingTop: 10,
-                borderRadius: 10,
-              }}
+              activeOpacity={1}
+              style={tailwind`border border-gray-300 mt-2 mx-2 p-1 rounded-lg `}
               onPress={() => {
                 defaultAddress(item);
               }}>
-              <Text style={styles.state}>{`State:  ${item.state}`}</Text>
-              <Text style={styles.state}>{`City:  ${item.city}`}</Text>
-              <Text style={styles.state}>{`Pincode:  ${item.pincode}`}</Text>
-              <Text
-                style={[
-                  styles.state,
-                  {
-                    position: 'absolute',
-                    right: 10,
-                    top: 10,
-                    backgroundColor: '#B1BFF5',
-                    padding: 5,
-                    borderRadius: 10,
-                    fontSize: 10,
-                    fontWeight: '600',
-                  },
-                ]}>
-                {item.type}
-              </Text>
-              <View style={styles.bottomView}>
-                <TouchableOpacity
-                  style={[styles.bottomicon, {marginRight: 10}]}
-                  onPress={() => {
-                    navigation.navigate('AddAddress', {
-                      type: 'edit',
-                      data: item,
-                    });
-                  }}>
-                  <Image
-                    source={require('../images/edit.png')}
-                    style={styles.bottomicon}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.bottomicon}
-                  onPress={() => {
-                    dispatch(deleteAddress(item.id));
-                  }}>
-                  <Image
-                    source={require('../images/delete.png')}
-                    style={styles.bottomicon}
-                  />
-                </TouchableOpacity>
+              <View
+                style={tailwind`w-full flex flex-row items-center mb-1 transform overflow-hidden rounded-lg bg-white mx-auto p-2`}>
+                <View
+                  style={tailwind`w-16 h-16 p-1 flex items-center justify-center`}>
+                  {item.type == 'office' && (
+                    <Image
+                      source={require('../images/office.png')}
+                      style={tailwind`w-full h-full`}
+                    />
+                  )}
+                  {item.type == 'Home' && (
+                    <Image
+                      source={require('../images/home.png')}
+                      style={tailwind`w-full h-full`}
+                    />
+                  )}
+                </View>
+
+                <View style={tailwind`px-2 w-[84%] bg-transparent`}>
+                  <View
+                    style={tailwind`w-full flex flex-row items-center justify-between`}>
+                    <View>
+                      <Text
+                        style={tailwind`text-lg font-bold text-black capitalize`}>
+                        {item.type} Address
+                      </Text>
+                      <Text style={tailwind`text-lg capitalize`}>
+                        {item.state}, {item.city}, {item.pincode}
+                      </Text>
+                    </View>
+
+                    <View>
+                      <TouchableOpacity
+                        style={tailwind`w-6 h-6`}
+                        onPress={() => {
+                          dispatch(deleteAddress(item.id));
+                        }}>
+                        <Image
+                          style={tailwind`w-full h-full`}
+                          source={require('../images/delete.png')}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={tailwind`w-6 h-6 mt-4`}
+                        onPress={() => {
+                          navigation.navigate('AddAddress', {
+                            type: 'edit',
+                            data: item,
+                          });
+                        }}>
+                        <Image
+                          style={tailwind`w-full h-full`}
+                          source={require('../images/edit.png')}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
               </View>
             </TouchableOpacity>
           );

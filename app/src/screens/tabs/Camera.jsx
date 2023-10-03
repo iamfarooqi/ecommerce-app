@@ -2,6 +2,7 @@ import React, {useState, useRef} from 'react';
 import {RNCamera} from 'react-native-camera';
 import {TouchableOpacity, Alert, StyleSheet, View, Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import tailwind from 'twrnc';
 
 const Camera = () => {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ const Camera = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={tailwind`flex-1`}>
       <RNCamera
         ref={cameraRef}
         captureAudio={false}
@@ -66,8 +67,8 @@ const Camera = () => {
 const styles = StyleSheet.create({
   cameraButtonContainer: {
     position: 'absolute',
-    bottom: 20, // Adjust the value as needed for your layout
-    alignSelf: 'center', // Center horizontally
+    bottom: 20,
+    alignSelf: 'center',
   },
   cameraButton: {
     backgroundColor: 'white',

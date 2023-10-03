@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../../common/Header';
 import {useNavigation} from '@react-navigation/native';
@@ -15,12 +7,10 @@ import {addProducts} from '../../redux/slices/ProductsSlice';
 import tailwind from 'twrnc';
 
 const Home = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [products, setProducts] = useState([]);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    getProducts();
-  }, []);
+
   const getProducts = () => {
     fetch('https://fakestoreapi.com/products')
       .then(res => res.json())
@@ -33,8 +23,12 @@ const Home = () => {
       });
   };
 
+  useEffect(() => {
+    getProducts();
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <View style={tailwind`flex-1`}>
       <Header
         leftIcon={require('../../images/menu.png')}
         rightIcon={require('../../images/cart.png')}
@@ -105,9 +99,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
