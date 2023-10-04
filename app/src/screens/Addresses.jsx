@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import Header from '../common/Header';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -38,8 +31,9 @@ const Addresses = () => {
   useEffect(() => {
     console.log(addressList);
   }, [isFocused]);
+
   return (
-    <View style={styles.container}>
+    <View style={tailwind`flex-1 bg-white`}>
       <Header
         leftIcon={require('../images/back.png')}
         title={'My Addresses'}
@@ -53,7 +47,7 @@ const Addresses = () => {
           return (
             <TouchableOpacity
               activeOpacity={1}
-              style={tailwind`border border-gray-300 mt-2 mx-2 p-1 rounded-lg `}
+              style={tailwind`border border-gray-300 mt-2 mx-2 p-1 rounded-lg`}
               onPress={() => {
                 defaultAddress(item);
               }}>
@@ -121,43 +115,14 @@ const Addresses = () => {
         }}
       />
       <TouchableOpacity
-        style={styles.addButton}
+        style={tailwind`w-12 h-12 bg-[#008080] rounded-full absolute bottom-14 right-4 flex items-center justify-center`}
         onPress={() => {
           navigation.navigate('AddAddress', {type: 'new'});
         }}>
-        <Text style={{fontSize: 30, color: '#fff'}}>+</Text>
+        <Text style={tailwind`text-white text-xl font-bold`}>+</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Addresses;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  addButton: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#EC8A00',
-    borderRadius: 25,
-    position: 'absolute',
-    bottom: 50,
-    right: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  state: {color: '#000', fontSize: 18},
-  bottomView: {
-    position: 'absolute',
-    right: 10,
-    bottom: 10,
-    flexDirection: 'row',
-  },
-  bottomicon: {
-    width: 24,
-    height: 24,
-  },
-});

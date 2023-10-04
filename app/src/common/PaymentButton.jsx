@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -12,7 +13,8 @@ import {useStripe} from '@stripe/stripe-react-native';
 import {useDispatch} from 'react-redux';
 import {orderItem} from '../redux/slices/OrderSlice';
 import {emptyCart} from '../redux/slices/CartSlice';
-
+import tailwind from 'twrnc';
+const yourGif = require('../images/loading.gif');
 const PaymentButton = ({
   selectedAddress,
   logInUserData,
@@ -42,40 +44,44 @@ const PaymentButton = ({
           },
         );
         const data = await response.json();
+
         if (!response.ok) return Alert.alert(data.message);
         const clientSecret = data.clientSecret;
         const initSheet = await stripe.initPaymentSheet({
           paymentIntentClientSecret: clientSecret,
           merchantDisplayName: name,
         });
+
         if (initSheet.error) return Alert.alert(initSheet.error.message);
         const presentSheet = await stripe.presentPaymentSheet({
           clientSecret,
         });
+
         if (presentSheet.error) return Alert.alert(presentSheet.error.message);
 
         const orderData = orderPlace(clientSecret);
         dispatch(orderItem(orderData));
         dispatch(emptyCart([]));
-        setLoading(false);
 
         navigation.navigate('OrderSuccess');
       }
     } catch (err) {
       console.error(err);
       Alert.alert('Something went wrong, try again later!');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.checkout}
+        style={tailwind`w-96 py-3 rounded-full bg-[#008080] flex flex-row justify-center items-center`}
         onPress={() => {
           pay();
         }}>
-        <Text style={{color: '#fff'}}>
-          {loading ? 'loading' : 'Pay & Order'}
+        <Text style={tailwind`text-lg font-bold text-white`}>
+          {loading ? 'Loading' : 'Pay now $' + getTotal()}
         </Text>
       </TouchableOpacity>
     </View>

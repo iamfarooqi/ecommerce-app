@@ -1,11 +1,9 @@
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   Image,
   FlatList,
-  Dimensions,
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -19,12 +17,14 @@ import {
 } from '../redux/slices/CartSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PaymentButton from '../common/PaymentButton';
+import tailwind from 'twrnc';
 
 const Checkout = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const items = useSelector(state => state.cart);
+  const addressList = useSelector(state => state.address);
 
   const [cartItems, setCartItems] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState(0);
@@ -100,8 +100,9 @@ const Checkout = () => {
     setCartItems(items.data);
     userData();
   }, [items, isFocused]);
+
   return (
-    <View style={styles.container}>
+    <View style={tailwind`flex-1 bg-white`}>
       <Header
         leftIcon={require('../images/back.png')}
         title={'Checkout'}
@@ -109,76 +110,115 @@ const Checkout = () => {
           navigation.goBack();
         }}
       />
-      <View style={styles.scrollContainer}>
-        <ScrollView>
-          <Text style={styles.title}>Added Items</Text>
-          <View>
-            <FlatList
-              data={cartItems}
-              renderItem={({item, index}) => {
-                return (
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    style={styles.productItem}
-                    onPress={() => {
-                      navigation.navigate('ProductDetail', {data: item});
-                    }}>
-                    <Image
-                      source={{uri: item.image}}
-                      style={styles.itemImage}
-                    />
-                    <View>
-                      <Text style={styles.name}>
-                        {item.title.length > 25
-                          ? item.title.substring(0, 25) + '...'
-                          : item.title}
-                      </Text>
-                      <Text style={styles.desc}>
-                        {item.description.length > 30
-                          ? item.description.substring(0, 30) + '...'
-                          : item.description}
-                      </Text>
-                      <View style={styles.qtyview}>
-                        <Text style={styles.price}>{'$' + item.price}</Text>
-                        <TouchableOpacity
-                          style={styles.btn}
-                          onPress={() => {
-                            if (item.qty > 1) {
-                              dispatch(reduceItemFromCart(item));
-                            } else {
-                              dispatch(removeItemFromCart(index));
+      <View
+        style={tailwind`w-full flex flex-row items-center justify-between transform overflow-hidden bg-white mx-auto px-2 pt-3`}>
+        <View style={tailwind`flex flex-row items-center`}>
+          <Text style={tailwind`font-bold text-base text-black mr-1`}>
+            {cartItems && cartItems.length} Items
+          </Text>
+          <Text>in your cart</Text>
+        </View>
+        <View style={tailwind`justify-center items-center`}>
+          <Text style={tailwind`text-base`}>TOTAL</Text>
+          <Text style={tailwind`font-bold text-xl text-black`}>
+            {'$' + getTotal()}
+          </Text>
+        </View>
+      </View>
+      <View style={tailwind`p-3`}>
+        {/* ADDRESSES */}
+        <Text style={tailwind`text-lg font-bold text-black`}>
+          DELIVERY ADDRESS
+        </Text>
+        {addressList.data.length > 0 && (
+          <FlatList
+            data={addressList.data}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity
+                  activeOpacity={1}
+                  style={tailwind`border mt-2 p-1 rounded-lg ${
+                    selectedAddress.type == item.type
+                      ? 'border-[#008080]'
+                      : 'border-gray-300'
+                  }`}
+                  onPress={() => {
+                    setSelectedAddress(item);
+                  }}>
+                  <View
+                    style={tailwind`w-full flex flex-row items-center mb-1 transform overflow-hidden rounded-lg bg-white mx-auto p-2`}>
+                    <View
+                      style={tailwind`w-16 h-16 p-1 flex items-center justify-center`}>
+                      {item.type == 'office' && (
+                        <Image
+                          source={require('../images/office.png')}
+                          style={tailwind`w-full h-full`}
+                        />
+                      )}
+                      {item.type == 'Home' && (
+                        <Image
+                          source={require('../images/home.png')}
+                          style={tailwind`w-full h-full`}
+                        />
+                      )}
+                    </View>
+                    <View style={tailwind`px-2 w-[84%] bg-transparent`}>
+                      <View
+                        style={tailwind`w-full flex flex-row items-center justify-between`}>
+                        <View>
+                          <Text
+                            style={tailwind`text-lg font-bold text-black capitalize`}>
+                            {item.type} Address
+                          </Text>
+                          <Text style={tailwind`text-lg capitalize`}>
+                            {item.state}, {item.city}, {item.pincode}
+                          </Text>
+                        </View>
+                        <View>
+                          <Image
+                            source={
+                              selectedAddress.type == item.type
+                                ? require('../images/radio_2.png')
+                                : require('../images/radio_1.png')
                             }
-                          }}>
-                          <Text style={{fontSize: 18, fontWeight: '600'}}>
-                            -
-                          </Text>
-                        </TouchableOpacity>
-                        <Text style={styles.qty}>{item.qty}</Text>
-                        <TouchableOpacity
-                          style={styles.btn}
-                          onPress={() => {
-                            dispatch(addItemToCart(item));
-                          }}>
-                          <Text style={{fontSize: 18, fontWeight: '600'}}>
-                            +
-                          </Text>
-                        </TouchableOpacity>
+                            style={[
+                              {
+                                width: 24,
+                                height: 24,
+                                tintColor:
+                                  selectedAddress.type == item.type
+                                    ? '#008080'
+                                    : 'black',
+                              },
+                            ]}
+                          />
+                        </View>
                       </View>
                     </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
-          <View style={styles.totalView}>
-            <Text style={styles.title}>Total</Text>
-            <Text style={[styles.title, {marginRight: 20}]}>
-              {'$' + getTotal()}
-            </Text>
-          </View>
-          <Text style={styles.title}>Select Payment Mode</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        )}
+        <View style={tailwind`mt-4`}>
+          <Text
+            style={tailwind`text-lg font-semibold underline text-blue-600`}
+            onPress={() => {
+              navigation.navigate('Addresses');
+            }}>
+            + Add New
+          </Text>
+        </View>
+        <Text style={tailwind`mt-4 text-lg text-gray-600`}></Text>
+
+        {/* PAYMENT METHOD */}
+        <View>
+          <Text style={tailwind`text-lg font-bold text-black`}>
+            PAYMENT METHOD
+          </Text>
           <TouchableOpacity
-            style={styles.paymentMethods}
+            style={tailwind`flex-row items-center mt-4 pl-1`}
             onPress={() => {
               setSelectedMethod(0);
             }}>
@@ -189,52 +229,16 @@ const Checkout = () => {
                   : require('../images/radio_1.png')
               }
               style={[
-                styles.img,
-                {tintColor: selectedMethod == 0 ? 'orange' : 'black'},
+                {
+                  width: 24,
+                  height: 24,
+                  tintColor: selectedMethod == 0 ? '#008080' : 'black',
+                },
               ]}
             />
-            <Text style={styles.paymentMethdodsTxt}>Card</Text>
+            <Text style={tailwind`ml-2 text-base text-black`}>Card</Text>
           </TouchableOpacity>
-
-          {/* <TouchableOpacity
-            style={styles.paymentMethods}
-            onPress={() => {
-              setSelectedMethod(1);
-            }}>
-            <Image
-              source={
-                selectedMethod == 1
-                  ? require('../images/radio_2.png')
-                  : require('../images/radio_1.png')
-              }
-              style={[
-                styles.img,
-                {tintColor: selectedMethod == 1 ? 'orange' : 'black'},
-              ]}
-            />
-            <Text style={styles.paymentMethdodsTxt}>Cash on Delivery</Text>
-          </TouchableOpacity> */}
-          <View style={styles.addressView}>
-            <Text style={styles.title}>Address</Text>
-            <Text
-              style={[
-                styles.title,
-                {textDecorationLine: 'underline', color: '#0269A0FB'},
-              ]}
-              onPress={() => {
-                navigation.navigate('Addresses');
-              }}>
-              Edit Address
-            </Text>
-          </View>
-          <Text
-            style={[
-              styles.title,
-              {marginTop: 10, fontSize: 16, color: '#636363'},
-            ]}>
-            {selectedAddress || 'Please Select Address'}
-          </Text>
-        </ScrollView>
+        </View>
       </View>
       <PaymentButton
         selectedAddress={selectedAddress}
@@ -247,103 +251,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 18,
-    marginLeft: 20,
-    marginTop: 30,
-    color: '#000',
-  },
-  scrollContainer: {
-    flex: 1, // Take up all available space
-    paddingBottom: 90,
-  },
-  productItem: {
-    width: Dimensions.get('window').width,
-    height: 100,
-    marginTop: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  itemImage: {
-    width: 100,
-    height: 100,
-  },
-  name: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 20,
-  },
-  desc: {
-    marginLeft: 20,
-  },
-  price: {
-    color: 'green',
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 20,
-    marginTop: 5,
-  },
-  qtyview: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  btn: {
-    padding: 5,
-    width: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 0.5,
-    borderRadius: 10,
-    marginLeft: 10,
-  },
-  qty: {
-    marginLeft: 10,
-    fontSize: 18,
-  },
-  noItems: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  totalView: {
-    width: '100%',
-    justifyContent: 'space-between',
-
-    flexDirection: 'row',
-    height: 70,
-    alignItems: 'center',
-    borderBottomWidth: 0.3,
-    borderBottomColor: '#B7B7B7',
-  },
-  paymentMethods: {
-    flexDirection: 'row',
-    width: '90%',
-    marginTop: 20,
-    paddingLeft: 20,
-  },
-  img: {
-    width: 24,
-    height: 24,
-  },
-  paymentMethdodsTxt: {
-    marginLeft: 15,
-    fontSize: 16,
-    color: '#000',
-  },
-  addressView: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: 0,
-    paddingRight: 20,
-  },
-});

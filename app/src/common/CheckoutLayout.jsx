@@ -15,9 +15,11 @@ const CheckoutLayout = ({total, items}) => {
   return (
     <View
       style={tailwind`absolute bottom-0 h-20 px-2 w-full bg-white flex flex-row justify-between`}>
-      <View style={tailwind`justify-center items-center`}>
-        <Text style={tailwind`text-lg`}>Total</Text>
-        <Text style={tailwind`font-bold text-xl`}>{'$' + total}</Text>
+      <View style={tailwind`justify-center`}>
+        <Text style={tailwind`text-lg`}>TOTAL</Text>
+        <Text style={tailwind`font-bold text-xl text-black`}>
+          {'$' + total}
+        </Text>
       </View>
       <View style={tailwind`justify-center items-center`}>
         <TouchableOpacity
