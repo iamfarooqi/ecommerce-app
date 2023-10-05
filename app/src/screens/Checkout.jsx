@@ -33,6 +33,9 @@ const Checkout = () => {
     'Please Select Address',
   );
 
+  console.log(selectedAddress, 'selectedAddress>');
+  console.log(addressList, 'addressList>');
+
   const getTotal = () => {
     let total = 0;
     cartItems.map(item => {
@@ -54,7 +57,13 @@ const Checkout = () => {
   };
 
   const getSelectedAddress = async () => {
-    setSelectedAddress(await AsyncStorage.getItem('MY_ADDRESS'));
+    try {
+      if (addressList.data.length > 0) {
+        setSelectedAddress(addressList.data[0]);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
   };
 
   const orderPlace = paymentId => {

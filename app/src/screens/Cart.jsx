@@ -21,14 +21,11 @@ import tailwind from 'twrnc';
 
 const Cart = () => {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
   const items = useSelector(state => state.cart);
 
   const [cartItems, setCartItems] = useState([]);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    setCartItems(items.data);
-  }, [items]);
 
   const getTotal = () => {
     let total = 0;
@@ -37,6 +34,11 @@ const Cart = () => {
     });
     return total.toFixed(0);
   };
+
+  useEffect(() => {
+    setCartItems(items.data);
+  }, [items]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -47,7 +49,7 @@ const Cart = () => {
         }}
       />
       <View
-        style={tailwind`w-full flex flex-row items-center justify-between transform overflow-hidden bg-white mx-auto p-2 py-3`}>
+        style={tailwind`w-full flex flex-row items-center justify-between overflow-hidden bg-white mx-auto p-2 py-3`}>
         <View style={tailwind``}>
           <Text>{cartItems && cartItems.length} Items in your cart</Text>
         </View>
@@ -73,7 +75,7 @@ const Cart = () => {
                 navigation.navigate('ProductDetail', {data: item});
               }}>
               <View
-                style={tailwind`w-full flex flex-row items-center mb-1 transform overflow-hidden rounded-lg bg-white mx-auto p-2`}>
+                style={tailwind`w-full flex flex-row items-center mb-1 overflow-hidden rounded-lg bg-white mx-auto p-2`}>
                 <View style={tailwind`w-20 h-20`}>
                   <Image
                     source={{uri: item.image}}
@@ -97,10 +99,15 @@ const Cart = () => {
                       </Text>
                     </View>
                     <View style={tailwind``}>
-                      <Image
-                        source={require('../images/delete.png')}
-                        style={tailwind`w-4 h-4`}
-                      />
+                      <TouchableOpacity
+                        onPress={() => {
+                          dispatch(removeItemFromCart(index));
+                        }}>
+                        <Image
+                          source={require('../images/delete.png')}
+                          style={tailwind`w-4 h-4`}
+                        />
+                      </TouchableOpacity>
                     </View>
                   </View>
 

@@ -75,11 +75,18 @@ const ProductDetail = () => {
             />
           </View>
 
-          <Text style={tailwind`text-3xl my-3`}>
+          <Text style={tailwind`text-3xl my-3 text-black`}>
             {route.params.data.title.length > 20
               ? route.params.data.title.substring(0, 20) + '...'
               : route.params.data.title}
           </Text>
+          <View
+            style={tailwind`flex flex-row items-center justify-between mb-2`}>
+            <Text style={tailwind`text-base`}>Bottle 0f 150 tablets</Text>
+            <View>
+              <Text style={tailwind`text-base`}>Available in stock 20</Text>
+            </View>
+          </View>
           <Text>
             {route.params.data.description.length > 100
               ? route.params.data.description.substring(0, 100) + '...'
@@ -87,11 +94,14 @@ const ProductDetail = () => {
           </Text>
           <View
             style={tailwind`flex flex-row items-center justify-between my-3`}>
-            <Text style={tailwind`font-semibold text-xl`}>
-              {'$' + route.params.data.price}
-            </Text>
+            <View style={tailwind`flex flex-row`}>
+              <Text style={tailwind`font-semibold text-xl text-black`}>
+                {'$' + route.params.data.price}
+              </Text>
+              <Text style={tailwind`text-lg line-through ml-2`}>MRP $150</Text>
+            </View>
             <View>
-              <Text style={tailwind`font-semibold text-lg text-green-500`}>
+              <Text style={tailwind`font-semibold text-base text-green-500`}>
                 50% OFF
               </Text>
             </View>

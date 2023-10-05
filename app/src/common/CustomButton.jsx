@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: 30,
-    borderRadius: 10,
+    borderRadius: 100,
   },
 });

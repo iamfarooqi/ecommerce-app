@@ -14,7 +14,10 @@ import {useDispatch} from 'react-redux';
 import {orderItem} from '../redux/slices/OrderSlice';
 import {emptyCart} from '../redux/slices/CartSlice';
 import tailwind from 'twrnc';
-const yourGif = require('../images/loading.gif');
+
+
+
+
 const PaymentButton = ({
   selectedAddress,
   logInUserData,
@@ -22,8 +25,9 @@ const PaymentButton = ({
   orderPlace,
 }) => {
   const navigation = useNavigation();
-  const stripe = useStripe();
   const dispatch = useDispatch();
+  const stripe = useStripe();
+
   const [loading, setLoading] = useState(false);
 
   const pay = async () => {
@@ -34,7 +38,7 @@ const PaymentButton = ({
 
       if (name && price) {
         const response = await fetch(
-          'https://ecommerce-app-server-83r5axsov-iamfarooqi.vercel.app/pay',
+          'https://ecommerce-app-server-sooty.vercel.app/pay',
           {
             method: 'POST',
             body: JSON.stringify({logInUserData, selectedAddress, price}),

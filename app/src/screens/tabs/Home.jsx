@@ -50,13 +50,14 @@ const Home = () => {
               onPress={() => {
                 navigation.navigate('ProductDetail', {data: item});
               }}>
-              <View
-                style={tailwind`w-48 transform overflow-hidden rounded-lg bg-white`}>
-                <Image
-                  style={tailwind`h-34 w-full object-cover object-center`}
-                  source={{uri: item.image}}
-                  alt="Product Image"
-                />
+              <View style={tailwind`w-48 overflow-hidden rounded-lg bg-white`}>
+                <View style={tailwind`h-40 w-full`}>
+                  <Image
+                    style={tailwind`h-full w-full object-cover`}
+                    source={{uri: item.image}}
+                    alt="Product Image"
+                  />
+                </View>
                 <View style={tailwind`px-2`}>
                   <Text style={tailwind`text-lg font-medium text-gray-900`}>
                     {item.title.length > 15
@@ -78,11 +79,11 @@ const Home = () => {
                     <View style={tailwind`flex`}>
                       <Text
                         style={tailwind`text-base font-medium text-gray-500`}>
-                        {'$' + item.price}
+                        {'MRP' + ' $40'}
                       </Text>
                       <Text
                         style={tailwind`text-base font-medium text-green-500`}>
-                        {'$' + item.price}
+                        40% OFF
                       </Text>
                     </View>
                   </View>

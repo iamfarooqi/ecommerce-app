@@ -55,7 +55,6 @@ const Wishlist = () => {
           return (
             <TouchableOpacity
               activeOpacity={1}
-              style={tailwind``}
               onPress={() => {
                 navigation.navigate('ProductDetail', {data: item});
               }}>
@@ -71,19 +70,19 @@ const Wishlist = () => {
                 <View style={tailwind`px-2 w-[80%]`}>
                   <View
                     style={tailwind`w-full flex flex-row items-center justify-between`}>
-                    <View style={tailwind``}>
+                    <View>
                       <Text style={tailwind`text-lg font-bold`}>
                         {item.title.length > 25
                           ? item.title.substring(0, 25) + '...'
                           : item.title}
                       </Text>
-                      <Text style={tailwind``}>
+                      <Text>
                         {item.description.length > 30
                           ? item.description.substring(0, 30) + '...'
                           : item.description}
                       </Text>
                     </View>
-                    <View style={tailwind``}>
+                    <View>
                       <Image
                         source={require('../../images/delete.png')}
                         style={tailwind`w-4 h-4`}
