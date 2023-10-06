@@ -36,6 +36,8 @@ const PaymentButton = ({
       const name = logInUserData.name;
       const price = getTotal();
 
+      console.log(logInUserData, selectedAddress, price, '>>');
+      selectedAddress = JSON.stringify(selectedAddress);
       if (name && price) {
         const response = await fetch(
           'https://ecommerce-app-server-sooty.vercel.app/pay',
