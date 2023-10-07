@@ -8,6 +8,7 @@ const Camera = () => {
   const navigation = useNavigation();
   const cameraRef = useRef(null);
   const [takingPic, setTakingPic] = useState(false);
+  const [cameraType, setCameraType] = useState(RNCamera.Constants.Type.back);
 
   const takePicture = async () => {
     if (cameraRef.current && !takingPic) {
@@ -17,11 +18,8 @@ const Camera = () => {
         forceUpOrientation: true,
       };
 
-      //   setTakingPic(true);
-
       try {
         const {uri} = await cameraRef.current.takePictureAsync(options);
-        // Alert.alert('Success', 'Picture taken');
         navigation.navigate('PredictionScreen', {data: {uri}});
       } catch (err) {
         Alert.alert(
@@ -29,10 +27,15 @@ const Camera = () => {
           'Failed to take a picture: ' + (err.message || err),
         );
       }
-      //   finally {
-      //     setTakingPic(false);
-      //   }
     }
+  };
+
+  const toggleCamera = () => {
+    setCameraType(
+      cameraType === RNCamera.Constants.Type.back
+        ? RNCamera.Constants.Type.front
+        : RNCamera.Constants.Type.back,
+    );
   };
 
   return (
@@ -41,13 +44,31 @@ const Camera = () => {
         ref={cameraRef}
         captureAudio={false}
         style={{flex: 1}}
-        type={RNCamera.Constants.Type.back}
+        type={cameraType} // Set the camera type here
         androidCameraPermissionOptions={{
           title: 'Permission to use camera',
           message: 'We need your permission to use your camera',
           buttonPositive: 'Ok',
           buttonNegative: 'Cancel',
         }}>
+        <View style={tailwind`p-2 flex flex-row justify-between m-2`}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              navigation.navigate('Main');
+            }}>
+            <Image
+              source={require('../../images/clear.png')}
+              style={tailwind`w-5 h-5`}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleCamera}>
+            <Image
+              source={require('../../images/switch-camera.png')}
+              style={styles.toggleCameraImage}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.cameraButtonContainer}>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -76,6 +97,15 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   cameraButtonImage: {
+    width: 30,
+    height: 30,
+  },
+  toggleCameraButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  toggleCameraImage: {
     width: 30,
     height: 30,
   },

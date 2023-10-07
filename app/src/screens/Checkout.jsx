@@ -9,20 +9,15 @@ import {
 import React, {useEffect, useState} from 'react';
 import Header from '../common/Header';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  addItemToCart,
-  reduceItemFromCart,
-  removeItemFromCart,
-} from '../redux/slices/CartSlice';
+import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PaymentButton from '../common/PaymentButton';
 import tailwind from 'twrnc';
 
 const Checkout = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
   const items = useSelector(state => state.cart);
   const addressList = useSelector(state => state.address);
 
@@ -33,15 +28,18 @@ const Checkout = () => {
     'Please Select Address',
   );
 
-  console.log(selectedAddress, 'selectedAddress>');
-  console.log(addressList, 'addressList>');
-
   const getTotal = () => {
     let total = 0;
-    cartItems.map(item => {
-      total = total + item.qty * item.price;
-    });
-    return total.toFixed(0);
+    try {
+      if (cartItems.length > 0) {
+        cartItems.map(item => {
+          total = total + item.qty * item.price;
+        });
+      }
+      return total.toFixed(0);
+    } catch (error) {
+      console.log('Error:', error);
+    }
   };
 
   const userData = async () => {
@@ -120,7 +118,7 @@ const Checkout = () => {
         }}
       />
       <View
-        style={tailwind`w-full flex flex-row items-center justify-between transform overflow-hidden bg-white mx-auto px-2 pt-3`}>
+        style={tailwind`w-full flex flex-row items-center justify-between overflow-hidden bg-white mx-auto px-2 pt-3`}>
         <View style={tailwind`flex flex-row items-center`}>
           <Text style={tailwind`font-bold text-base text-black mr-1`}>
             {cartItems && cartItems.length} Items
@@ -155,7 +153,7 @@ const Checkout = () => {
                     setSelectedAddress(item);
                   }}>
                   <View
-                    style={tailwind`w-full flex flex-row items-center mb-1 transform overflow-hidden rounded-lg bg-white mx-auto p-2`}>
+                    style={tailwind`w-full flex flex-row items-center mb-1 overflow-hidden rounded-lg bg-white mx-auto p-2`}>
                     <View
                       style={tailwind`w-16 h-16 p-1 flex items-center justify-center`}>
                       {item.type == 'office' && (
